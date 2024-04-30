@@ -152,7 +152,7 @@ module Paranoia
       run_callbacks(:real_destroy) do
         @_disable_counter_cache = paranoia_destroyed?
         dependent_reflections = self.class.reflections.select do |name, reflection|
-          reflection.options[:dependent] == :destroy
+          [:destroy, :destroy_async].include?(association.options[:dependent])
         end
         if dependent_reflections.any?
           dependent_reflections.each do |name, reflection|
@@ -227,7 +227,7 @@ module Paranoia
   # we called #destroy
   def restore_associated_records(recovery_window_range = nil)
     destroyed_associations = self.class.reflect_on_all_associations.select do |association|
-      association.options[:dependent] == :destroy
+      [:destroy, :destroy_async].include?(association.options[:dependent])
     end
 
     destroyed_associations.each do |association|
