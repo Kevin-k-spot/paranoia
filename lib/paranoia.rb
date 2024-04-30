@@ -152,7 +152,7 @@ module Paranoia
       run_callbacks(:real_destroy) do
         @_disable_counter_cache = paranoia_destroyed?
         dependent_reflections = self.class.reflections.select do |name, reflection|
-          [:destroy, :destroy_async].include?(association.options[:dependent])
+          [:destroy, :destroy_async].include?(reflection.options[:dependent])
         end
         if dependent_reflections.any?
           dependent_reflections.each do |name, reflection|
